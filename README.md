@@ -83,13 +83,17 @@ https://github.com/ana-yet/service-sys-server
 ```
 
 - 2. Install Dependencies
-    ```npm install```
+ ```
+npm install
+```
 - 3. Add .env File
   ```   Follow the format above to configure your MongoDB URI and Firebase credentials. ```
 
 - 4. Start Server
 
-```npm start index.js```
+```
+npm start index.js
+```
 
 ## 📂 Folder Structure
 
