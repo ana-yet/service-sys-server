@@ -64,24 +64,32 @@ This is the **server-side application** for the Service Review System. It provid
 ---
 
 ## 🔐 Firebase Authentication (Admin SDK)
+The API uses Firebase Admin SDK to verify tokens on protected routes.
 
-The API uses **Firebase Admin SDK** to verify tokens on protected routes.
+- Protected routes use a middleware called verifyToken.
 
-- Protected routes use a middleware called `verifyToken`.
-- JWT must be sent in the `Authorization` header:
+- JWT must be sent in the Authorization header:
+
+```
+Authorization: Bearer <your_firebase_token>
+```
+
 
 ## ⚙️ Installation & Setup
 
-- 1. Clone the Repository
+- 1. Clone the Repository 
+``` 
+https://github.com/ana-yet/service-sys-server
+```
 
 - 2. Install Dependencies
-     `npm install`
+    ```npm install```
 - 3. Add .env File
-     Follow the format above to configure your MongoDB URI and Firebase credentials.
+  ```   Follow the format above to configure your MongoDB URI and Firebase credentials. ```
 
 - 4. Start Server
 
-`npm start index.js`
+```npm start index.js```
 
 ## 📂 Folder Structure
 
