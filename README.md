@@ -25,12 +25,19 @@ This is the **server-side application** for the Service Review System. It provid
 
 ## 🛠️ Tech Stack
 
-- **Node.js**
-- **Express.js**
-- **MongoDB (with MongoClient and ObjectId)**
-- **Firebase Admin SDK** (JWT token verification)
-- **dotenv** (Environment variables)
-- **CORS** (Secure cross-origin requests)
+- Node.js
+
+- Express.js ^5.1.0
+
+- MongoDB ^6.17.0
+
+- Firebase Admin SDK ^13.4.0
+
+- dotenv ^16.5.0
+
+- CORS ^2.8.5
+
+
 
 ---
 
