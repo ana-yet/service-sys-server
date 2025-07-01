@@ -203,7 +203,7 @@ async function run() {
       const service = await allServicesCollection
         .find({})
         .sort({ reviewCount: -1 })
-        .limit(6)
+        .limit(8)
         .toArray();
 
       res.json(service);
