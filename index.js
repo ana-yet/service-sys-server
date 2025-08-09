@@ -202,11 +202,27 @@ async function run() {
     app.get("/featured", async (req, res) => {
       const service = await allServicesCollection
         .find({})
-        .sort({ reviewCount: -1 })
+        .sort({ reviewCount: -1, rating: -1 })
         .limit(8)
         .toArray();
 
       res.json(service);
+    });
+
+    // home page latest review
+    app.get("/latest-review", async (req, res) => {
+      try {
+        const result = await reviewCollection
+          .find()
+          .sort({ date: -1 })
+          .limit(5)
+          .toArray();
+
+        res.json(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server Error" });
+      }
     });
 
     app.post("/review", verifyToken, async (req, res) => {
