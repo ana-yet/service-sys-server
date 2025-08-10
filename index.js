@@ -64,7 +64,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
+    await client.connect();
 
     const allServicesCollection = client
       .db("ServiceReview")
@@ -212,13 +212,29 @@ async function run() {
     // home page latest review
     app.get("/latest-review", async (req, res) => {
       try {
-        const result = await reviewCollection
+        const latestReviews = await reviewCollection
           .find()
           .sort({ date: -1 })
-          .limit(5)
+          .limit(6)
           .toArray();
 
-        res.json(result);
+        const totalReviews = await reviewCollection.countDocuments();
+
+        const goodReviews = await reviewCollection.countDocuments({
+          rating: { $gte: 4 },
+        });
+        const badReviews = await reviewCollection.countDocuments({
+          rating: { $lte: 2 },
+        });
+
+        res.json({
+          latestReviews,
+          stats: {
+            totalReviews,
+            goodReviews,
+            badReviews,
+          },
+        });
       } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server Error" });
@@ -332,10 +348,10 @@ async function run() {
     });
 
     // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
-    // console.log(
-    //   "Pinged your deployment. You successfully connected to MongoDB!"
-    // );
+    await client.db("admin").command({ ping: 1 });
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
