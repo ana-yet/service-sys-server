@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 // middleware
 app.use(
   cors({
-    origin: process.env.CLIENT_SITE,
+    origin: "*",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -64,7 +64,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const allServicesCollection = client
       .db("ServiceReview")
@@ -347,11 +347,42 @@ async function run() {
       res.send(result);
     });
 
+    // New endpoint for comparing multiple services
+    app.post("/services/compare", async (req, res) => {
+      try {
+        const { serviceIds } = req.body;
+
+        if (!Array.isArray(serviceIds) || serviceIds.length === 0) {
+          return res
+            .status(400)
+            .json({ message: "Invalid service IDs provided" });
+        }
+
+        // Convert string IDs to ObjectId
+        const objectIds = serviceIds.map((id) => new ObjectId(id));
+
+        // Fetch services by their IDs
+        const services = await allServicesCollection
+          .find({
+            _id: { $in: objectIds },
+          })
+          .toArray();
+
+        res.status(200).json({ services });
+      } catch (error) {
+        console.error("Error comparing services:", error);
+        res.status(500).json({
+          message: "Failed to compare services",
+          error: error.message,
+        });
+      }
+    });
+
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    // await client.db("admin").command({ ping: 1 });
+    // console.log(
+    //   "Pinged your deployment. You successfully connected to MongoDB!"
+    // );
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
