@@ -165,10 +165,12 @@ async function run() {
     });
 
     app.get("/user", async (req, res) => {
-      const email = req.query;
+      const { email } = req.query;
 
       try {
-        const users = await userCollection.findOne(email);
+        const filter = { email: email };
+        const users = await userCollection.findOne(filter);
+
         res.send(users);
       } catch (error) {
         res.status(500).send(error);
